@@ -533,22 +533,35 @@ def drive_example(c):
     target_speed=100
 
     # Steer To Corner
-    R['steer']= S['angle']*10 / PI
+    tmp = S['angle']*10 / PI
     # Steer To Center
-    R['steer']-= S['trackPos']*.10
+    tmp -= S['trackPos']*.10
+
+    threshold = 0.1
+    steering = 0.5
+    if tmp > threshold:
+        R['steer'] = steering
+    elif tmp < - threshold:
+        R['steer'] = - steering
+    else:
+        R['steer'] = 0
+
 
     # Throttle Control
     if S['speedX'] < target_speed - (R['steer']*50):
-        R['accel']+= .01
+        R['brake'] = 0
     else:
-        R['accel']-= .01
-    if S['speedX']<10:
-       R['accel']+= 1/(S['speedX']+.1)
+        R['brake'] = 1
 
-    # Traction Control System
-    if ((S['wheelSpinVel'][2]+S['wheelSpinVel'][3]) -
-       (S['wheelSpinVel'][0]+S['wheelSpinVel'][1]) > 5):
-       R['accel']-= .2
+    R['accel'] = 0.5
+    print('brake {}, steering {}'.format(R['brake'], R['steer']))
+    # if S['speedX']<10:
+    #    R['accel']+= 1/(S['speedX']+.1)
+
+    # # Traction Control System
+    # if ((S['wheelSpinVel'][2]+S['wheelSpinVel'][3]) -
+    #    (S['wheelSpinVel'][0]+S['wheelSpinVel'][1]) > 5):
+    #    R['accel']-= .2
 
     # Automatic Transmission
     R['gear']=1

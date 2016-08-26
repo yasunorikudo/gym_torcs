@@ -1,18 +1,20 @@
 from gym_torcs import TorcsEnv
-from sample_agent import Agent
+from expert_agent import Expert
 import numpy as np
 
 vision = True
+throttle = True
+gear_change = False
 episode_count = 10
-max_steps = 50
+max_steps = 50000
 reward = 0
 done = False
 step = 0
 
 # Generate a Torcs environment
-env = TorcsEnv(vision=vision, throttle=False)
+env = TorcsEnv(vision=vision, throttle=throttle, gear_change=gear_change)
 
-agent = Agent(1)  # steering only
+expert = Expert(4)  # steer, accel, brake and gear
 
 
 print("TORCS Experiment Start.")
@@ -27,7 +29,8 @@ for i in range(episode_count):
 
     total_reward = 0.
     for j in range(max_steps):
-        action = agent.act(ob, reward, done, vision)
+        action = expert.act(ob, reward, done, vision)
+        steer, accel, brake, gear = action
 
         ob, reward, done, _ = env.step(action)
         #print(ob)
