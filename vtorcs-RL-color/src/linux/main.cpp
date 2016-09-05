@@ -26,12 +26,14 @@
 
 #include "linuxspec.h"
 
+char* window_title = "torcs";
+
 static void
 init_args(int argc, char **argv)
 {
     int		i;
     char	*buf;
-    
+
     setTextOnly(false);
     setNoisy(false);
     setVersion("2010");
@@ -76,6 +78,11 @@ init_args(int argc, char **argv)
 	} else if (strncmp(argv[i], "-s", 2) == 0) {
 	    i++;
 	    SetSingleTextureMode ();
+  } else if (strncmp(argv[i], "-title", 6) == 0) {
+      i++;
+      printf("Window title set to %s\n", argv[i]);
+      window_title = argv[i];
+      i++;
 	} else if (strncmp(argv[i], "-t", 2) == 0) {
 	    i++;
 	    if (i < argc) {
@@ -107,26 +114,26 @@ init_args(int argc, char **argv)
 	} else if (strncmp(argv[i], "-nolaptime", 10) == 0) {
 	    i++;
 	    setLaptimeLimit(false);
-	    printf("Laptime limit disabled!\n");   
+	    printf("Laptime limit disabled!\n");
 	} else if (strncmp(argv[i], "-T", 2) == 0) {
 		    i++;
 		    setTextOnly(true);
-		    printf("Text Version!\n"); 
+		    printf("Text Version!\n");
   // GIUSE - UDP PORT AS ARGUMENT
 	} else if (strncmp(argv[i], "-p", 2) == 0) {
 		    i++;
 		    setUDPListenPort(atoi(argv[i]));
         i++;
-		    printf("UDP Listen Port set to %d!\n", getUDPListenPort()); 
+		    printf("UDP Listen Port set to %d!\n", getUDPListenPort());
   // GIUSE - VISION HERE! ACTIVATE IMAGE GENERATION (and send them to clients if specified in the car/server)
 	} else if (strncmp(argv[i], "-vision", 7) == 0) {
 		    i++;
 		    setVision(true);
-		    printf("Image generation is ON!\n"); 
+		    printf("Image generation is ON!\n");
   // GIUSE - FASTER THEN RUNTIME ACTIVATION FOR NON-TEXTUAL COMPUTATION
 	} else if (strncmp(argv[i], "-a", 2) == 0) {
 		    i++;
-		    printf("Speed set to %dx realtime!\n", atoi(argv[i])); 
+		    printf("Speed set to %dx realtime!\n", atoi(argv[i]));
 		    setSpeedMult((double) (1.0 / (double) atoi(argv[i])));
         i++;
 
@@ -152,29 +159,29 @@ init_args(int argc, char **argv)
  *	LINUX entry point of TORCS
  *
  * Parameters
- *	
+ *
  *
  * Return
- *	
+ *
  *
  * Remarks
- *	
+ *
  */
-int 
+int
 main(int argc, char *argv[])
 {
     init_args(argc, argv);
-    
+
     LinuxSpecInit();		/* init specific linux functions */
-    
+
     if (getTextOnly()==false)
     	GfScrInit(argc, argv);	/* init screen */
 
     TorcsEntry();		/* launch TORCS */
-    
+    glutSetWindowTitle(window_title);
+
     if (getTextOnly()==false)
     	glutMainLoop();		/* event loop of glut */
 
     return 0;			/* just for the compiler, never reached */
 }
-
