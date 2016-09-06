@@ -6,6 +6,8 @@ vision = True
 throttle = True
 brake = True
 gear_change = True
+port = 3031
+track_number = 0  # track_number = 0,1,2,...,18
 episode_count = 10
 max_steps = 50
 
@@ -14,8 +16,8 @@ done = False
 step = 0
 
 # Generate a Torcs environment
-env = TorcsEnv(
-    vision=vision, throttle=throttle, brake=brake, gear_change=gear_change)
+env = TorcsEnv(vision=vision, throttle=throttle, brake=brake,
+               gear_change=gear_change, port=port, track_number=track_number)
 agent = Agent()
 
 print("TORCS Experiment Start.")

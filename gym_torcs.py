@@ -30,16 +30,18 @@ class TorcsEnv:
             command += ' -vision'
         self.torcs_proc = subprocess.Popen([command], shell=True, preexec_fn=os.setsid)
         time.sleep(0.5)
-        os.system('sh autostart.sh {}'.format(window_title))
+        os.system('sh autostart.sh {} {}'.format(window_title, self.track_number))
         time.sleep(0.5)
 
-    def __init__(self, vision=False, throttle=False, brake=False, gear_change=False, port=3101):
+    def __init__(self, vision=False, throttle=False,
+                 brake=False, gear_change=False, port=3101, track_number=0):
        #print("Init")
         self.vision = vision
         self.throttle = throttle
         self.brake = brake
         self.gear_change = gear_change
         self.port = port
+        self.track_number = track_number
         self.torcs_proc = None
 
         self.initial_run = True
