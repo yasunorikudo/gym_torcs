@@ -88,14 +88,15 @@ class TorcsEnv:
 
         #  Simple Autnmatic Throttle Control by Snakeoil
         if self.throttle is False:
-            target_speed = self.default_speed
+            # target_speed = self.default_speed
+            target_speed = 100
             if client.S.d['speedX'] < target_speed - (client.R.d['steer']*50):
                 client.R.d['accel'] += .01
             else:
                 client.R.d['accel'] -= .01
 
-            if client.R.d['accel'] > 0.2:
-                client.R.d['accel'] = 0.2
+            # if client.R.d['accel'] > 0.2:
+            #     client.R.d['accel'] = 0.2
 
             if client.S.d['speedX'] < 10:
                 client.R.d['accel'] += 1/(client.S.d['speedX']+.1)
