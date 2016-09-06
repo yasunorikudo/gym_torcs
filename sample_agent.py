@@ -2,10 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class Agent(object):
-    def __init__(self):
-        pass
+    def __init__(self, env):
+        self.vision = env.vision
+        self.throttle = env.throttle
+        self.brake = env.brake
+        self.gear_change = env.gear_change
 
-    def act(self, ob, reward, done, vision):
+    def act(self, observation):
         # Get an Observation from the environment.
         # Each observation vectors are numpy array.
         # focus, opponents, track sensors are scaled into [0, 1]. When the agent
@@ -13,12 +16,12 @@ class Agent(object):
         # rpm, wheelSpinVel are raw values and then needed to be preprocessed.
         # vision is given as a tensor with size of (3, 64, 64) <-- rgb
         # and values are in [0, 255]
-        if vision is False:
+        if not self.vision:
             focus, speedX, speedY, speedZ, opponents, rpm, track, \
-                wheelSpinVel, angel, trackPos = ob
+                wheelSpinVel, angel, trackPos = observation
         else:
             focus, speedX, speedY, speedZ, opponents, rpm, track, \
-                wheelSpinVel, angel, trackPos, vision = ob
+                wheelSpinVel, angel, trackPos, vision = observation
 
             """ The code below is for checking the vision input. This is very
                 heavy for real-time Control
@@ -34,8 +37,10 @@ class Agent(object):
             plt.pause(0.001)
             """
         # random action
-        steer = np.random.uniform(-1, 1)
-        accel = np.random.uniform(0, 1)
-        brake = 0
-        gear = 1
-        return  steer, accel, brake, gear
+        action = {
+            'steer': np.random.uniform(-1, 1),
+            'accel': np.random.uniform(0, 1),
+            'brake': 0,
+            'gear': 1,
+        }
+        return  action

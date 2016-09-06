@@ -75,12 +75,10 @@ class TorcsEnv:
             low = np.array([0., -np.inf, -np.inf, -np.inf, 0., -np.inf, 0., -np.inf, 0])
             self.observation_space = spaces.Box(low=low, high=high)
 
-    def step(self, u):
+    def step(self, this_action):
        #print("Step")
         # convert thisAction to the actual torcs actionstr
         client = self.client
-
-        this_action = self.agent_to_torcs(u)
 
         # Apply Action
         action_torcs = client.R.d
@@ -224,21 +222,6 @@ class TorcsEnv:
         time.sleep(0.5)
         self.start_torcs_process()
         time.sleep(0.5)
-
-    def agent_to_torcs(self, u):
-        torcs_action = {'steer': u[0]}
-
-        if self.throttle is True:  # throttle action is enabled
-            torcs_action.update({'accel': u[1]})
-
-        if self.brake is True:  # brake is enabled
-            torcs_action.update({'brake': u[2]})
-
-        if self.gear_change is True: # gear change action is enabled
-            torcs_action.update({'gear': u[3]})
-
-        return torcs_action
-
 
     def obs_vision_to_image_rgb(self, obs_image_vec):
         image_vec =  obs_image_vec
