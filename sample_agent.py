@@ -37,10 +37,12 @@ class Agent(object):
             plt.pause(0.001)
             """
         # random action
-        action = {
-            'steer': np.random.uniform(-1, 1),
-            'accel': np.random.uniform(0, 1),
-            'brake': 0,
-            'gear': 1,
-        }
+        action = {'steer': np.random.uniform(-1, 1)}
+        if self.throttle:
+            action.update({'accel': np.random.uniform(0, 1)})
+        if self.brake:
+            action.update({'brake': 0})
+        if self.gear_change:
+            action.update({'gear': 1})
+
         return  action
