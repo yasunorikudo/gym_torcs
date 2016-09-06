@@ -37,5 +37,5 @@ class Agent(object):
         steer = np.random.uniform(-1, 1)
         accel = np.random.uniform(0, 1)
         brake = 0
-        gear = 0
+        gear = 1
         return  steer, accel, brake, gear
