@@ -15,6 +15,5 @@ sleep 0.1
 xdotool key --window $window Return
 sleep 0.1
 xdotool key --window $window Return
-# Uncomment for using vision as input
-# sleep 0.1
-# xdotool key --window $window F2
+sleep 0.1
+xdotool key --window $window F2

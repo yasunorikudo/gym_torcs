@@ -2,12 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class Agent(object):
-    def __init__(self, dim_action):
-        self.dim_action = dim_action
+    def __init__(self):
+        pass
 
     def act(self, ob, reward, done, vision):
-        #print("ACT!")
-
         # Get an Observation from the environment.
         # Each observation vectors are numpy array.
         # focus, opponents, track sensors are scaled into [0, 1]. When the agent
@@ -16,11 +14,14 @@ class Agent(object):
         # vision is given as a tensor with size of (3, 64, 64) <-- rgb
         # and values are in [0, 255]
         if vision is False:
-            focus, speedX, speedY, speedZ, opponents, rpm, track, wheelSpinVel = ob
+            focus, speedX, speedY, speedZ, opponents, rpm, track, \
+                wheelSpinVel, angel, trackPos = ob
         else:
-            focus, speedX, speedY, speedZ, opponents, rpm, track, wheelSpinVel, vision = ob
+            focus, speedX, speedY, speedZ, opponents, rpm, track, \
+                wheelSpinVel, angel, trackPos, vision = ob
 
-            """ The code below is for checking the vision input. This is very heavy for real-time Control
+            """ The code below is for checking the vision input. This is very
+                heavy for real-time Control
                 So you may need to remove.
             """
             """
@@ -32,4 +33,9 @@ class Agent(object):
             plt.draw()
             plt.pause(0.001)
             """
-        return np.tanh(np.random.randn(self.dim_action)) # random action
+        # random action
+        steer = np.random.uniform(-1, 1)
+        accel = np.random.uniform(0, 1)
+        brake = 0
+        gear = 0
+        return  steer, accel, brake, gear
