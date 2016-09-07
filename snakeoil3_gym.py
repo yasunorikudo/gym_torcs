@@ -557,8 +557,10 @@ def drive_example(c):
 
 # ================ MAIN ================
 if __name__ == "__main__":
-    C= Client(p=3101)
-    for step in range(C.maxSteps,0,-1):
+    from gym_torcs import TorcsEnv
+    env = TorcsEnv(track_number=0)
+    C = Client(env.start_torcs_process, p=3101)
+    for step in range(C.maxSteps, 0, -1):
         C.get_servers_input()
         drive_example(C)
         C.respond_to_server()
