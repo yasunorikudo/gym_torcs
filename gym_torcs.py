@@ -75,7 +75,7 @@ class TorcsEnv:
             low = np.array([0., -np.inf, -np.inf, -np.inf, 0., -np.inf, 0., -np.inf, 0])
             self.observation_space = spaces.Box(low=low, high=high)
 
-    def step(self, this_action):
+    def step(self, this_action, track_terminate=True):
        #print("Step")
         # convert thisAction to the actual torcs actionstr
         client = self.client
@@ -161,17 +161,20 @@ class TorcsEnv:
         episode_terminate = False
         if track.min() < 0:  # Episode is terminated if the car is out of track
             reward = - 1
-            episode_terminate = True
-            client.R.d['meta'] = True
-
-        if self.terminal_judge_start < self.time_step: # Episode terminates if the progress of agent is small
-            if progress < self.termination_limit_progress:
+            if track_terminate:
                 episode_terminate = True
                 client.R.d['meta'] = True
 
+        if self.terminal_judge_start < self.time_step: # Episode terminates if the progress of agent is small
+            if track_terminate:
+                if progress < self.termination_limit_progress:
+                    episode_terminate = True
+                    client.R.d['meta'] = True
+
         if np.cos(obs['angle']) < 0: # Episode is terminated if the agent runs backward
-            episode_terminate = True
-            client.R.d['meta'] = True
+            if track_terminate:
+                episode_terminate = True
+                client.R.d['meta'] = True
 
 
         if client.R.d['meta'] is True: # Send a reset signal
